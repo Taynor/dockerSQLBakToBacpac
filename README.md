@@ -1,18 +1,23 @@
 # dockerSQLBalToBacpac
 Docker image and Terraform to provision an Azure Container Instance, to automate a SQL server .bak to .bacpac file. This solution requires the a copy of the SQLPackge utility, hosted in the root directory of the solution files. This is depcited below.
 
-Architecture
+# Architecture
 
 Currently the solution consists of the following resources, hosted in Azure:
 
 Docker Image
+
 Azure Container Instance
+
 Azure File Share
+
 SQLPackage utility
+
 Shell and T-SQL scripts
+
 The container instance is designed to run with a kick off script/command, and will require no further action from the user.
 
-The Docker Image
+# The Docker Image
 
 The below image is a screen grab of the Docker file used to create the image.
 
@@ -39,7 +44,7 @@ The database-export.sh script executes the sqlpackage export command. The Data S
 
 ![image](https://user-images.githubusercontent.com/59668937/126812591-22f34b88-bd62-4cbe-8b2f-552d1bfebe37.png)
 
-The T-SQL Logic
+# The T-SQL Logic
 This is the logic contained in the T-SQL scripts, that extract the database configuration values. These include the following:
 
 Database name
