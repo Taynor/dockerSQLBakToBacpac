@@ -1,0 +1,2 @@
+#!/bin/bash
+/var/opt/sqlserver/sqlpackage/sqlpackage /a:Export /scs:"Data Source=localhost;Initial Catalog=databasename;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=#P455w0rd#" /tf:"/var/opt/sqlserver/database.bacpac"
