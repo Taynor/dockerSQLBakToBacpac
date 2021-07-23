@@ -2,6 +2,7 @@
 Docker image and Terraform to provision an Azure Container Instance, to automate a SQL server .bak to .bacpac file. This solution requires the a copy of the SQLPackge utility, hosted in the root directory of the solution files. This is depcited below.
 
 Architecture
+
 Currently the solution consists of the following resources, hosted in Azure:
 
 Docker Image
@@ -12,9 +13,10 @@ Shell and T-SQL scripts
 The container instance is designed to run with a kick off script/command, and will require no further action from the user.
 
 The Docker Image
+
 The below image is a screen grab of the Docker file used to create the image.
 
-image.png
+![image](https://user-images.githubusercontent.com/59668937/126812464-7f17bbc2-0b22-47ff-b00a-db63a3529d24.png)
 
 The image is based on the latest SQL server 2019 image from Microsoft. It has been packaged up with PowerShell and unzip, to future proof scenarios for an interactive container. What is key about the image is that the /var/opt/sqlserver path is created, when the Azure container instance is spun up. This path will be the access point to the Azure File Share. The image also contains the following environment variables:
 
@@ -26,16 +28,16 @@ The key shell scripts that enable the automation of the container instance. Are 
 
 This is the entrypoint.sh script required to kick off the process, once the container starts. There is a 1 minute delay before executing the database-conversion-control-process.sh. This is to allow the container instance to fully start up the SQL server database engine service.
 
-image.png
+![image](https://user-images.githubusercontent.com/59668937/126812541-daff49df-f30f-409d-8314-838d98ce9df1.png)
 
 The database-conversion-control-process.sh script, executes the necessary shell and T-SQL scripts (wrapped in sqlcmd commands) in dependency order. The 10 second delay before executing the database-export.sh script. Is required to allow the database-cleanup-utility.sh script to release the file handle on the dbname.txt file. This file stores the value of the database name retrieved from the .bak file. Once the string manipulation in the dbname.txt file is complete, the value is copied to dbname-replace.txt file. This is necessary to replace the value of the database name in the sqlpackage export command.
 The database-cleanup-utility.sh script, contains the logic to clean up the database objects within the restored database. It also performs the string manipulation in the dbname.txt file and database-export.sh script.
 
-image.png
+![image](https://user-images.githubusercontent.com/59668937/126812569-aa611980-6c2e-4ffb-a251-f942b6c757a5.png)
 
 The database-export.sh script executes the sqlpackage export command. The Data Source is set to localhost, as the command is exporting the database from the local running SQL server instance in the container instance. The Initial Catalog=databasename is set by the logic executed in the database-cleanup-utility.sh script.
 
-image.png
+![image](https://user-images.githubusercontent.com/59668937/126812591-22f34b88-bd62-4cbe-8b2f-552d1bfebe37.png)
 
 The T-SQL Logic
 This is the logic contained in the T-SQL scripts, that extract the database configuration values. These include the following:
@@ -45,4 +47,4 @@ Database data file logical name
 Database log file logical name
 These values are used through the sqlcmd commands executing the T-SQL scripts. To create the blank database (Docker version bug dependency) and restore the database using the .bak file.
 
-image.png
+![image](https://user-images.githubusercontent.com/59668937/126812621-063e0276-6859-4d18-870f-3bc5e23fec36.png)
