@@ -1,4 +1,4 @@
-# dockerSQLBalToBacpac
+# docker SQL Bak To Bacpac
 Docker image and Terraform to provision an Azure Container Instance, to automate a SQL server .bak to .bacpac file. This solution requires the a copy of the SQLPackge utility, hosted in the root directory of the solution files. This is depcited below.
 
 # Architecture
